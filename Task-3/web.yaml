@@ -1,0 +1,22 @@
+---
+ - name: configuring the dbservers
+   hosts: dbservers
+   tasks:
+     - name: install httpd package first
+       ansible.builtin.dnf:
+         name: httpd
+         state: present
+     - name: create webdev directory
+       ansible.builtin.file:
+       path: /home/student/webdev
+       state: directory
+       mode: '2775'
+     - name: creating link between /webdev and /var/www/html/webdev
+       ansible.builtin.file: 
+         src: /home/student/webdev
+         dest: /var/www/html/webdev
+         state: link
+     - name: creating file /webdev/index.html
+       ansible.builtin.copy:
+         dest: /home/student/webdev/index.html
+         content: "Development"

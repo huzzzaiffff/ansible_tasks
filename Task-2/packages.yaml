@@ -1,0 +1,19 @@
+--- 
+- name: configuring application components
+  hosts: appservers
+  tasks: 
+    - name: installing php and mariadb in webservers group of host 
+      ansible.builtin.dnf:
+        name: 
+          - php
+          - mariadb
+        state: present
+      when: inventory_hostname is in groups['webservers']
+    - name: installing Development Tools package in dbservers
+      ansible.builtin.dnf:
+        name: "@Development Tools" 
+        state: present
+      when: inventory_hostname is in groups['dbservers']
+    - name: update all packages on appservers host group
+      ansible.builtin.command:
+        cmd: sudo yum install
