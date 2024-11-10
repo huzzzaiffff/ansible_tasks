@@ -1,22 +1,30 @@
 ---
- - name: configuring the dbservers
-   hosts: dbservers
-   tasks:
-     - name: install httpd package first
-       ansible.builtin.dnf:
-         name: httpd
-         state: present
-     - name: create webdev directory
-       ansible.builtin.file:
-       path: /home/student/webdev
-       state: directory
-       mode: '2775'
-     - name: creating link between /webdev and /var/www/html/webdev
-       ansible.builtin.file: 
-         src: /home/student/webdev
-         dest: /var/www/html/webdev
-         state: link
-     - name: creating file /webdev/index.html
-       ansible.builtin.copy:
-         dest: /home/student/webdev/index.html
-         content: "Development"
+# This playbook configures the 'dbservers' group with tasks related to web development setup
+- name: configuring the dbservers
+  hosts: dbservers  # Target the 'dbservers' group
+  tasks:
+    # Task 1: Install the 'httpd' package (Apache web server)
+    - name: install httpd package first
+      ansible.builtin.dnf:
+        name: httpd  # The package to install (Apache HTTP server)
+        state: present  # Ensure the package is installed
+
+    # Task 2: Create the 'webdev' directory under '/home/student'
+    - name: create webdev directory
+      ansible.builtin.file:
+        path: /home/student/webdev  # Path where the directory will be created
+        state: directory  # Ensure that the path is a directory
+        mode: '2775'  # Set permissions (setgid and read-write-execute for owner and group)
+
+    # Task 3: Create a symbolic link between '/home/student/webdev' and '/var/www/html/webdev'
+    - name: creating link between /webdev and /var/www/html/webdev
+      ansible.builtin.file:
+        src: /home/student/webdev  # Source directory
+        dest: /var/www/html/webdev  # Destination for the symbolic link
+        state: link  # Ensure a symbolic link is created
+
+    # Task 4: Create the 'index.html' file in '/home/student/webdev' with the content "Development"
+    - name: creating file /webdev/index.html
+      ansible.builtin.copy:
+        dest: /home/student/webdev/index.html  # Path where the file will be created
+        content: "Development"  # The content that will be written into the file

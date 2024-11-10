@@ -1,19 +1,26 @@
---- 
+---
+# This playbook configures application components on the 'appservers' group
 - name: configuring application components
-  hosts: appservers
-  tasks: 
-    - name: installing php and mariadb in webservers group of host 
+  hosts: appservers  # Target the 'appservers' group
+  tasks:
+    # Task 1: Install php and mariadb on 'webservers' hosts
+    - name: installing php and mariadb in webservers group of host
       ansible.builtin.dnf:
         name: 
           - php
           - mariadb
-        state: present
-      when: inventory_hostname is in groups['webservers']
+        state: present  # Ensure these packages are installed
+      when: inventory_hostname is in groups['webservers']  # Only execute this on hosts in the 'webservers' group
+
+    # Task 2: Install Development Tools on 'dbservers' hosts
     - name: installing Development Tools package in dbservers
       ansible.builtin.dnf:
-        name: "@Development Tools" 
-        state: present
-      when: inventory_hostname is in groups['dbservers']
+        name: "@Development Tools"  # The Development Tools group package
+        state: present  # Ensure the package is installed
+      when: inventory_hostname is in groups['dbservers']  # Only execute this on hosts in the 'dbservers' group
+
+    # Task 3: Update all packages on the 'appservers' group of hosts
     - name: update all packages on appservers host group
       ansible.builtin.command:
-        cmd: sudo yum install
+        cmd: sudo yum update -y  # Update all packages on the system
+      when: inventory_hostname is in groups['appservers']  # Only execute this on hosts in the 'appservers' group

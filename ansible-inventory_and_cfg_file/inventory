@@ -1,8 +1,16 @@
+# Define a host (usually the controller or workstation) with the fully qualified domain name (FQDN)
 workstation.lab.example.com
+
 [webservers]
+# Define a range of web server hosts using a pattern (e.g., servera.lab.example.com, serverb.lab.example.com)
 server[a:b].lab.example.com
+
 [dbservers]
+# Define a range of database server hosts using a pattern (e.g., serverc.lab.example.com, serverd.lab.example.com)
 server[c:d].lab.example.com
+
 [appservers:children]
+# Define an application server group that includes other groups as children
+# This includes both webservers and dbservers in the appservers group
 webservers
 dbservers
